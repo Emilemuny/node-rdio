@@ -1,38 +1,55 @@
-[![NPM version](https://badge.fury.io/js/rdio.png)](http://badge.fury.io/js/rdio)
-[![Dependency Status](https://david-dm.org/dawnerd/node-rdio.png)](https://david-dm.org/dawnerd/node-rdio.png)
+# node-rdio
 
 node-rdio is a wrapper for the rdio web service api.
+
+[![NPM version](https://badge.fury.io/js/rdio.png)](http://badge.fury.io/js/rdio)
+[![Dependency Status](https://david-dm.org/dawnerd/node-rdio.png)](https://david-dm.org/dawnerd/node-rdio.png)
 
 ## Installation
 
 `npm install rdio --save`
 
-## Future Changes - Please Read
+## V2 notice
 
-This library is over 3 years old now. At the time I wrote it I was still fairly new to nodejs. Version 2 is coming!
-
-Planned changes:
-
- - No longer required to pass in oauth tokens every request
- - getRequestToken & getAccessToken will be deprecated
- - New config() method for setup
- - Promises & event support
- - Shortcut methods for api endpoints
- - Data validation
- - Error handling
-
-I'm open for requests. If you'd like to see something added, please open an issue.
+V2 is a complete re-write to be more modern. As such, expect everything to break. Please don't upgrade to v2 unless you're ready to change your code.
 
 ## Usage
 
-```javascript
-var rdio = require('rdio')(config);
+Config during require:
 
-rdio.api(oauth_access_token, oauth_access_token_secret, {
-    method: 'getTopCharts',
-    type: 'Track',
-    count: 10
-}, callback);
+```js
+var rdio = require('rdio')(config);
+```
+
+Deffered config:
+```js
+var rdio = require('rdio');
+
+var userRequest = new rdio(auth_token, auth_token_secret, config);
+```
+
+## Making requests
+
+Each user will have their own auth_token and auth_token_secret. You will need an instance of `rdio` for each user (but not each request).
+
+This example will initiate the requests to get the users auth tokens.
+
+```js
+var userRequest = new rdio();
+
+userRequest.getPlaybackToken('http://example.com', function(err, data){
+  console.log(data);
+});
+```
+
+If you already have an auth_token and an auth_token_secret for the user go ahead and pass that in.
+
+```js
+var userRequest = new rdio(auth_token, auth_token_secret);
+
+userRequest.getPlaybackToken('http://example.com', function(err, data){
+  console.log(data);
+});
 ```
 
 ## Methods
